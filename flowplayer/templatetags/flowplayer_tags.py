@@ -48,13 +48,17 @@ class FlowPlayerNode(Node):
             # Try resolve this variable in the template context
             self.media = self.media.resolve(context) 
         except VariableDoesNotExist:
-            # Cannot resolve, therefore it's an url
-            self.media_url = self.media
-            self.media_playlist = False
-        else:
+            # Cannot resolve, therefore treat as url string
+            pass
+        
+        # Have we got an array or a string?
+        if isinstance(self.media, list):
             # Can resolve, push first url into the url variable
             self.media_url = self.media[0]
             self.media_playlist = self.media
+        else:
+            self.media_url = self.media
+            self.media_playlist = False
 
         t = loader.get_template('flowplayer/flowplayer.html')
         code_context = Context(
