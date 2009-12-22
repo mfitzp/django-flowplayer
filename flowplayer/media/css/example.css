@@ -1,0 +1,15 @@
+
+
+
+.flowplayer { 
+    display: block;
+    width: 520px;
+    height: 330px;
+}
+
+.flowplayeraudio { 
+    display: block;
+    width: 520px;
+    height: 24px;
+}
+

@@ -1,0 +1,123 @@
+=================
+Django Flowplayer
+=================
+
+A mediaplayer application for `Django`_ projects using the flowplayer flash player
+to display media files of different types on your site. Originally based on the
+django-videoplayer application this has support for display of audio-specific players
+with the aim being to allow complete control of the flowplayer instances via Django.
+
+.. _`Django`: http://www.djangoproject.com
+
+.. contents::
+   :depth: 3
+
+
+Installation
+============
+
+Installing an official release
+------------------------------
+
+Official releases are made available from
+http://github.com/mfitzp/django-flowplayer
+
+Source distribution
+~~~~~~~~~~~~~~~~~~~
+
+Download the .zip distribution file and unpack it. Inside is a script
+named ``setup.py``. Enter this command::
+
+   python setup.py install
+
+...and the package will install automatically. 
+
+Alternatively just copy the ``flowplayer`` directory into your path.
+
+Installing the development version
+----------------------------------
+
+To get the development version for development you can git clone from the public url:
+
+   git clone git://github.com/mfitzp/django-flowplayer.git
+
+Add the resulting folder to your `PYTHONPATH`_ or symlink (`junction`_,
+if you're on Windows) the ``flowplayer`` directory inside it into a
+directory which is on your PYTHONPATH, such as your Python
+installation's ``site-packages`` directory.
+
+You can verify that the application is available on your PYTHONPATH by
+opening a Python interpreter and entering the following commands::
+
+   >>> import flowplayer
+   >>> flowplayer.VERSION
+   (0, 3, 'pre')
+
+.. caution::
+
+   The development version may contain bugs which are not present in the
+   release version and introduce backwards-incompatible changes.
+
+.. _`PYTHONPATH`: http://www.python.org/doc/2.5.2/tut/node8.html#SECTION008120000000000000000
+.. _`junction`: http://www.microsoft.com/technet/sysinternals/FileAndDisk/Junction.mspx
+
+Using Django Flowplayer in your applications
+-----------------------------------------
+
+Once you've installed Django Flowplayer and want to use it in your Django
+applications, do the following:
+
+   1. Put ``'flowplayer'`` in your ``INSTALLED_APPS`` setting.
+   2. Download the latest version of flowplayer from flowplayer.org
+   3. Streaming audio? Download http://flowplayer.org/plugins/streaming/audio.html
+   4. Unpack the files and pull all of them in a directory in your media path (e.g. /media/flowplayer)
+   5. Add a script tag to your template head, pointing at the .js file (in /media/flowplayer)
+   6. In your settings.py set the correct value for FLOWPLAYER_URL
+   7. Add the css ( /media/css/example.css ) to your site css or roll your own
+   8. Load the tags into a template and try it out!
+
+That's it!
+
+
+Settings
+========
+
+Some of the application's behaviour can be configured by adding the
+appropriate settings to your project's settings file.
+
+The following settings are available:
+
+FLOWPLAYER_URL
+--------------
+
+The url to the flowplayer flash file (and -controls and audio plugins).
+
+
+Template tags
+=============
+
+The ``flowplayer.templatetags.flowplayer_tags`` module defines the
+(only!) flowplayer tag for displaying a mediaplayer instance.
+
+Tag reference
+-------------
+
+flowplayer
+~~~~~~~~~~
+
+Outputs a flowplayer mediaplayer instance for a given url, with an optional
+'classtype' parameter for specifying audio player display.  When provided 
+classtype is used to add an additional CSS class to the player, in the form
+flowplayer<classtype>, allowing for specific layouts for given mediatypes. 
+
+See example.css in the media/css folder for a demonstration.
+
+Usage::
+
+   {% flowplayer url classtype %}
+
+Examples::
+
+   {% flowplayer object.url %}
+   {% flowplayer http://example.com/video.flv %}
+   {% flowplayer http://example.com/audio.mp3 audio %}
