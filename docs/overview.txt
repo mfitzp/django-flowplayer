@@ -92,6 +92,28 @@ FLOWPLAYER_URL
 
 The url to the flowplayer flash file (and -controls and audio plugins).
 
+FLOWPLAYER_CONFIG
+--------------
+
+This is a dict defining the config settings for the play for a given player type.
+The root entry is the type e.g 'audio' with the configuration entries following the 
+same hierarchy as defined in the flowplayer docs.
+
+Any settings in 'default' will apply to all players (settings are merged with 
+any named player you define). See below for an example:
+
+FLOWPLAYER_CONFIG = {
+                        'default' : 
+                            { 'clip' : { 'autoPlay':'false' },
+                              'plugins' : { 'controls' : { 'playlist': 'true' } } 
+                            },
+                        
+                        'audio' : 
+                            { 'clip' :
+                                { 'autoPlay':'false' }
+                            },
+                    }
+
 
 Template tags
 =============
@@ -105,19 +127,23 @@ Tag reference
 flowplayer
 ~~~~~~~~~~
 
-Outputs a flowplayer mediaplayer instance for a given url, with an optional
-'classtype' parameter for specifying audio player display.  When provided 
-classtype is used to add an additional CSS class to the player, in the form
-flowplayer<classtype>, allowing for specific layouts for given mediatypes. 
+Outputs a flowplayer mediaplayer instance for a given url/playlist array, with an optional
+'playertype' parameter for specifying audio player display.  When provided 
+playertype is used to add an additional CSS class to the player, in the form
+flowplayer<playertype>, allowing for specific layouts for given mediatypes. 
 
 See example.css in the media/css folder for a demonstration.
 
 Usage::
 
-   {% flowplayer url classtype %}
+   {% flowplayer media playertype %}
 
 Examples::
 
    {% flowplayer object.url %}
    {% flowplayer http://example.com/video.flv %}
    {% flowplayer http://example.com/audio.mp3 audio %}
+   {% flowplayer array_of_urls %}
+
+
+

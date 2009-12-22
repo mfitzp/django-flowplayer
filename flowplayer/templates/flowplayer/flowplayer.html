@@ -1,10 +1,45 @@
-        <a  
-            href="{{ media_url }}"  
-            class="flowplayer{% if player_class %} flowplayer{{ player_class }}{% endif %}"
-            id="flowplayer{{ player_id }}"> 
-        </a> 
-    
-        <!-- this will install flowplayer inside previous A- tag. -->
-        <script>
-            flowplayer("flowplayer{{ player_id }}", "{{ player_url }}");
-        </script>
+<a  
+    href="{{ media_url }}"  
+    class="flowplayer{% if player_class %} flowplayer{{ player_class }}{% endif %}"
+    id="flowplayer{{ player_id }}"> 
+</a> 
+<!-- this will install flowplayer inside previous A- tag. -->
+<script>
+    flowplayer("flowplayer{{ player_id }}", "{{ player_url }}", {        // supply the configuration 
+
+    {% if player_config.clip %}
+    clip : {
+        {% for keycl, valuecl in player_config.clip.items %}
+                {{ keycl }}: {{ valuecl }}
+        {% endfor %}
+    },
+    {% endif %}
+
+    {% if media_playlist %}
+    playlist: [
+        {% for entry in media_playlist %}'{{ entry }}', {% endfor %}
+    ], 
+    {% endif %}
+
+
+    {% if player_config.plugins %}
+    plugins: {          
+        {% if player_config.plugins.controls %}
+            controls: { 
+                {% for keyc, valuec in player_config.plugins.controls.items %}
+                    {{ keyc }}: {{ valuec }}
+                {% endfor %}
+                {% if player_config.plugins.controls.tooltips %}
+                tooltips: {                
+                    {% for keyct, valuect in player_config.plugins.controls.tooltips.items %}
+                        {{ keyct }}: {{ valuect }}
+                    {% endfor %}
+                } 
+                {% endif %}
+            } 
+        {% endif %}
+    }, 
+    {% endif %}
+
+}); 
+</script>
