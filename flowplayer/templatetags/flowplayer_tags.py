@@ -3,7 +3,7 @@ from django.template import TemplateSyntaxError, VariableDoesNotExist, Node
 from django.template import Library, Variable, loader, Context
 
 # ID of current flowplayer being rendered (global to ensure unique)
-FLOWPLAYER_ITERATOR =0
+FLOWPLAYER_ITERATOR = 0
 
 register = Library()
 
@@ -24,10 +24,6 @@ class FlowPlayerNode(Node):
         self.player_class = player_class
         self.media = Variable(media)
 
-        global FLOWPLAYER_ITERATOR
-        FLOWPLAYER_ITERATOR += 1
-        self.player_id = FLOWPLAYER_ITERATOR
-
         if settings.FLOWPLAYER_URL:
             self.player_url = settings.FLOWPLAYER_URL
         else:
@@ -44,10 +40,16 @@ class FlowPlayerNode(Node):
             self.player_config.update(settings.FLOWPLAYER_CONFIG[player_class])
 
     def render(self, context):
+
+        if 'flowplayer_iterator' in context:
+            context['flowplayer_iterator'] += 1
+        else:
+            context['flowplayer_iterator'] = 0
+
         try:           
             # Try resolve this variable in the template context
             self.media = self.media.resolve(context) 
-        except VariableDoesNotExist:
+        except:
             # Cannot resolve, therefore treat as url string
             pass
         
@@ -63,7 +65,7 @@ class FlowPlayerNode(Node):
         t = loader.get_template('flowplayer/flowplayer.html')
         code_context = Context(
                             {"player_url": self.player_url,
-                             "player_id": self.player_id,
+                             "player_id": context['flowplayer_iterator'],
                              "player_class": self.player_class,
                              "player_config": self.player_config,
                              "media_url": self.media_url,
@@ -104,7 +106,7 @@ def do_flowplayer(parser, token):
         player_class = None
 
     media = args[1]
-    
+
     return FlowPlayerNode(media, player_class)
 
 
