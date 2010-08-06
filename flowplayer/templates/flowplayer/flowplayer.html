@@ -5,22 +5,28 @@
 </a> 
 <!-- this will install flowplayer inside previous A- tag. -->
 <script>
-    flowplayer("flowplayer{{ player_id }}", "{{ player_url }}", {        // supply the configuration 
+$(function() {
+
+    $f("flowplayer{{ player_id }}", "{{ player_url }}", {        // supply the configuration 
 
     {% if player_config.clip %}
     clip : {
         {% for keycl, valuecl in player_config.clip.items %}
-                {{ keycl }}: {{ valuecl }}
+                {{ keycl }}: {{ valuecl }},
         {% endfor %}
     },
     {% endif %}
 
     {% if media_playlist %}
     playlist: [
-        {% for entry in media_playlist %}'{{ entry }}', {% endfor %}
+        {% for entry in media_playlist %}
+            { 
+                url: '{{ entry.url }}' ,
+                title: '{{ entry.title }}'
+            },
+        {% endfor %}
     ], 
     {% endif %}
-
 
     {% if player_config.plugins %}
     plugins: {          
@@ -38,8 +44,13 @@
                 {% endif %}
             } 
         {% endif %}
-    }, 
+    }
     {% endif %}
-
+    });
+    
+    {% if media_playlist %}
+        $f("flowplayer{{ player_id }}").playlist("div.clips:first", {loop:true});
+    {% endif %}
+    
 }); 
 </script>

@@ -56,7 +56,7 @@ class FlowPlayerNode(Node):
         # Have we got an array or a string?
         if isinstance(self.media, list):
             # Can resolve, push first url into the url variable
-            self.media_url = self.media[0]
+            self.media_url = self.media[0]['url']
             self.media_playlist = self.media
         else:
             self.media_url = self.media
