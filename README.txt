@@ -13,3 +13,5 @@ Starting as a fork of django-videoplayer, the purpose of this app is to provide 
 complete implementation of flowplayer configuration from within the Django framework.
 Currently it is possible to output multiple player 'classes' using an optional tag
 allowing different media to be presented in different ways. 
+
+Now requires JQuery

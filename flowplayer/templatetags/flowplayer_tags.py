@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models.query import QuerySet
 from django.template import TemplateSyntaxError, VariableDoesNotExist, Node
 from django.template import Library, Variable, loader, Context
 
@@ -57,6 +58,10 @@ class FlowPlayerNode(Node):
         if isinstance(self.media, list):
             # Can resolve, push first url into the url variable
             self.media_url = self.media[0]['url']
+            self.media_playlist = self.media
+        if isinstance(self.media, QuerySet):
+            # Can resolve, push first url into the url variable
+            self.media_url = self.media[0].url
             self.media_playlist = self.media
         else:
             self.media_url = self.media

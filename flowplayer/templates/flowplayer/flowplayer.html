@@ -12,7 +12,7 @@ $(function() {
     {% if player_config.clip %}
     clip : {
         {% for keycl, valuecl in player_config.clip.items %}
-                {{ keycl }}: {{ valuecl }},
+                {{ keycl|safe }}: {{ valuecl|safe }},
         {% endfor %}
     },
     {% endif %}
