@@ -1,0 +1,2 @@
+recursive-include flowplayer/templates *
+recursive-include flowplayer/media *
