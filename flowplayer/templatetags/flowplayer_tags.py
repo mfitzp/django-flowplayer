@@ -11,7 +11,7 @@ register = Library()
 class FlowPlayerNode(Node):
     "Renderer class for the flowplayer template tag."
     
-    def __init__(self, media, player_class):
+    def __init__(self, media, player_class, player_id=None):
         """
         Constructor.
 
@@ -24,6 +24,8 @@ class FlowPlayerNode(Node):
         """
         self.player_class = player_class
         self.media = Variable(media)
+        if player_id != None:
+            self.player_id = Variable(player_id)
 
         if settings.FLOWPLAYER_URL:
             self.player_url = settings.FLOWPLAYER_URL
@@ -49,28 +51,33 @@ class FlowPlayerNode(Node):
 
         try:           
             # Try resolve this variable in the template context
-            self.media = self.media.resolve(context) 
+            self.media_element = self.media.resolve(context) 
         except:
             # Cannot resolve, therefore treat as url string
-            pass
+            self.media_element = self.media
         
-        # Have we got an array or a string?
-        if isinstance(self.media, list):
-            # Can resolve, push first url into the url variable
-            self.media_url = self.media[0]['url']
-            self.media_playlist = self.media
-        if isinstance(self.media, QuerySet):
-            # Can resolve, push first url into the url variable
-            self.media_url = self.media[0].url
-            self.media_playlist = self.media
-        else:
-            self.media_url = self.media
-            self.media_playlist = False
+        try:
+            self.extra_id = self.player_id.resolve(context)
+        except:
+            self.extra_id = ''
 
+        # Have we got an array or a string?
+        if isinstance(self.media_element, list):
+            # Can resolve, push first url into the url variable
+            self.media_url = self.media_element[0]['url']
+            self.media_playlist = self.media_element
+        if isinstance(self.media_element, QuerySet):
+            # Can resolve, push first url into the url variable
+            self.media_url = self.media_element[0].url
+            self.media_playlist = self.media_element
+        else:
+            self.media_url = self.media_element
+            self.media_playlist = False
+        
         t = loader.get_template('flowplayer/flowplayer.html')
         code_context = Context(
                             {"player_url": self.player_url,
-                             "player_id": context['flowplayer_iterator'],
+                             "player_id": '%s%s' % (context['flowplayer_iterator'],self.extra_id),
                              "player_class": self.player_class,
                              "player_config": self.player_config,
                              "media_url": self.media_url,
@@ -109,10 +116,15 @@ def do_flowplayer(parser, token):
         player_class = args[2]
     else:
         player_class = None
+        
+    if len(args) == 4:
+        player_id = args[3]
+    else:
+        player_id = None
 
     media = args[1]
 
-    return FlowPlayerNode(media, player_class)
+    return FlowPlayerNode(media, player_class, player_id)
 
 
 # register the tag 
