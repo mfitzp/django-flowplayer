@@ -33,12 +33,12 @@ $(function() {
         {% if player_config.plugins.controls %}
             controls: { 
                 {% for keyc, valuec in player_config.plugins.controls.items %}
-                    {{ keyc }}: {{ valuec }}
+                    {{ keyc }}: {{ valuec }},
                 {% endfor %}
                 {% if player_config.plugins.controls.tooltips %}
                 tooltips: {                
                     {% for keyct, valuect in player_config.plugins.controls.tooltips.items %}
-                        {{ keyct }}: {{ valuect }}
+                        {{ keyct }}: {{ valuect }},
                     {% endfor %}
                 } 
                 {% endif %}
