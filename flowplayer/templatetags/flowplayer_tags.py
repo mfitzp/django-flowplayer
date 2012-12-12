@@ -33,6 +33,7 @@ class FlowPlayerNode(Node):
         else:
             self.player_url = "%sflowplayer/FlowPlayerLight.swf" % (settings.MEDIA_URL)
 
+    def render(self, context):
         # Import the configuration settings to set on the player output
         # Configuration is defined in the settings (multiple types of player)
         if 'default' in settings.FLOWPLAYER_CONFIG:
@@ -40,10 +41,8 @@ class FlowPlayerNode(Node):
         else:
             self.player_config = dict()
 
-        if player_class in settings.FLOWPLAYER_CONFIG:
-            self.player_config.update(settings.FLOWPLAYER_CONFIG[player_class])
-
-    def render(self, context):
+        if self.player_class in settings.FLOWPLAYER_CONFIG:
+            self.player_config.update(settings.FLOWPLAYER_CONFIG[self.player_class])
 
         if 'flowplayer_iterator' in context:
             context['flowplayer_iterator'] += 1
